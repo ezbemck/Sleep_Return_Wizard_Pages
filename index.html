@@ -12,11 +12,10 @@
 <body>
   <main class="page-shell">
     <header class="app-header">
-      <div>
+      <div class="header-copy">
         <p class="eyebrow">Sleep report utility</p>
         <h1>Sleep Return Wizard</h1>
       </div>
-      <div class="header-mark" aria-hidden="true">SRW</div>
     </header>
 
     <form class="workspace" id="questionnaire-form">
@@ -99,11 +98,11 @@
           <label for="morning_comment">Additional comments:</label><textarea id="morning_comment" name="morning_comment" rows="4" placeholder="Pt mentioned that..."></textarea>
         </section>
       </div>
-      <button class="generate-button" type="submit"><span>Generate report</span><strong>→</strong></button>
+      <button class="generate-button" type="submit">Generate</button>
     </form>
 
     <aside class="output-panel">
-      <div class="output-heading"><h2>Generated report</h2><button type="button" class="copy-button" id="copy-button" disabled>Copy</button></div>
+      <div class="output-heading"><button type="button" class="copy-button" id="copy-button" disabled>Copy</button></div>
       <textarea id="report-output" readonly placeholder="Your formatted report will appear here after you generate it."></textarea>
       <p class="status" id="copy-status">The form resets when you start a new entry - no data is stored.</p>
     </aside>
