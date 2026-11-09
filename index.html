@@ -8,14 +8,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="form-controls.css">
 </head>
 <body>
   <main class="page-shell">
     <header class="app-header">
-      <div class="header-copy">
+      <div>
         <p class="eyebrow">Sleep report utility</p>
         <h1>Sleep Return Wizard</h1>
       </div>
+      <div class="header-mark" aria-hidden="true">SRW</div>
     </header>
 
     <form class="workspace" id="questionnaire-form">
@@ -55,9 +57,8 @@
               <label class="choice"><input type="radio" name="caffeine" value="yes" data-reveals="caffeine-details"><span>Yes</span></label>
             </div>
             <div class="conditional" id="caffeine-details">
-              <label for="caffeine_type">Type</label><input id="caffeine_type" name="caffeine_type" type="text" placeholder="coffee, tea, soda">
-              <label for="caffeine_amount">Amount</label><input id="caffeine_amount" name="caffeine_amount" type="text" placeholder="e.g. 2 cups">
-              <label for="caffeine_time">When?</label><select id="caffeine_time" name="caffeine_time"><option value="AM">AM</option><option value="PM">PM</option></select>
+              <div id="caffeine-rows"></div>
+              <button class="add-caffeine-button" id="add-caffeine" type="button" title="Add another caffeine entry" aria-label="Add another caffeine entry">+</button>
             </div>
           </fieldset>
 
@@ -70,19 +71,25 @@
           <fieldset>
             <legend>Pain affecting sleep?</legend>
             <div class="choice-row"><label class="choice"><input type="radio" name="pain" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="pain" value="yes" data-reveals="pain-details"><span>Yes</span></label></div>
-            <div class="conditional" id="pain-details"><label for="pain_description">Describe the pain</label><input id="pain_description" name="pain_description" type="text" placeholder="e.g. back pain"></div>
+            <div class="conditional pain-entry" id="pain-details">
+              <span>Pt is experiencing</span>
+              <input id="pain_description" name="pain_description" type="text" placeholder="type of pain" aria-label="Type of pain">
+              <select id="pain_frequency" name="pain_frequency" aria-label="How often pain occurs"><option value="rarely">rarely</option><option value="infrequently">infrequently</option><option value="always">always</option></select>
+              <span>affecting</span>
+              <select id="pain_effect" name="pain_effect" aria-label="Sleep affected"><option value="sleep onset">sleep onset</option><option value="sleep maintenance">sleep maintenance</option><option value="sleep onset & maintenance">sleep onset &amp; maintenance</option></select>
+            </div>
           </fieldset>
 
           <fieldset>
             <legend>Went to bed</legend><input id="bedtime" name="bedtime" type="time" required>
           </fieldset>
           <fieldset>
-            <legend>Lights out</legend><input id="lights_out" name="lights_out" type="time" required>
-          </fieldset>
-          <fieldset>
             <legend>Read or watched TV in bed?</legend>
             <div class="choice-row"><label class="choice"><input type="radio" name="in_bed_activity" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="in_bed_activity" value="yes" data-reveals="activity-details"><span>Yes</span></label></div>
-            <div class="conditional" id="activity-details"><label for="in_bed_activity_details">What did the patient do?</label><input id="in_bed_activity_details" name="in_bed_activity_details" type="text" value="read or watched TV"></div>
+            <div class="conditional activity-entry" id="activity-details"><span>Pt</span><input id="in_bed_activity_details" name="in_bed_activity_details" type="text" value="read or watched TV" aria-label="What did the patient do"><span>in bed</span></div>
+          </fieldset>
+          <fieldset>
+            <legend>Lights out</legend><input id="lights_out" name="lights_out" type="time" required>
           </fieldset>
         </section>
 
@@ -94,15 +101,15 @@
           <fieldset><legend>Slept compared with usual</legend><div class="choice-row tick-row"><label class="choice"><input type="radio" name="sleep_comparison" value="much_better" required><span>Much better</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="better"><span>Better</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="same"><span>Same</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="worse"><span>Worse</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="much_worse"><span>Much worse</span></label></div></fieldset>
           <fieldset><legend>Perceived sleep latency</legend><div class="choice-row tick-row"><label class="choice"><input type="radio" name="sleep_latency" value="much_longer" required><span>Much longer</span></label><label class="choice"><input type="radio" name="sleep_latency" value="longer"><span>Longer</span></label><label class="choice"><input type="radio" name="sleep_latency" value="same"><span>Same</span></label><label class="choice"><input type="radio" name="sleep_latency" value="shorter"><span>Shorter</span></label><label class="choice"><input type="radio" name="sleep_latency" value="much_shorter"><span>Much shorter</span></label></div></fieldset>
           <fieldset><legend>Feeling upon waking</legend><div class="choice-row tick-row"><label class="choice"><input type="radio" name="waking_feeling" value="alert" required><span>Alert</span></label><label class="choice"><input type="radio" name="waking_feeling" value="refreshed"><span>Refreshed</span></label><label class="choice"><input type="radio" name="waking_feeling" value="awake_not_alert"><span>Awake - Not Alert</span></label><label class="choice"><input type="radio" name="waking_feeling" value="awake_not_refreshed"><span>Awake - Not refreshed</span></label><label class="choice"><input type="radio" name="waking_feeling" value="sleepy"><span>Sleepy</span></label></div></fieldset>
-          <fieldset><legend>Did any leads or sensors come off?</legend><div class="choice-row"><label class="choice"><input type="radio" name="sensors" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="sensors" value="yes" data-reveals="sensor-details"><span>Yes</span></label></div><div class="conditional" id="sensor-details"><label for="sensor_details">Which sensors?</label><input id="sensor_details" name="sensor_details" type="text" placeholder="List sensors"></div></fieldset>
-          <label for="morning_comment">Additional comments:</label><textarea id="morning_comment" name="morning_comment" rows="4" placeholder="Pt mentioned that..."></textarea>
+          <fieldset><legend>Did any leads or sensors come off?</legend><div class="choice-row"><label class="choice"><input type="radio" name="sensors" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="sensors" value="yes" data-reveals="sensor-details"><span>Yes</span></label></div><div class="conditional" id="sensor-details"><label for="sensor_details">Which sensors?</label><input id="sensor_details" name="sensor_details" type="text" placeholder="Pt mentioned that the" data-prefill="Pt mentioned that the "></div></fieldset>
+          <label for="morning_comment">Additional comments:</label><textarea id="morning_comment" name="morning_comment" rows="4" placeholder="Pt mentioned that" data-prefill="Pt mentioned that "></textarea>
         </section>
       </div>
-      <button class="generate-button" type="submit">Generate</button>
+      <button class="generate-button" type="submit"><span>Generate report</span><strong>→</strong></button>
     </form>
 
     <aside class="output-panel">
-      <div class="output-heading"><button type="button" class="copy-button" id="copy-button" disabled>Copy</button></div>
+      <div class="output-heading"><h2>Generated report</h2><button type="button" class="copy-button" id="copy-button" disabled>Copy</button></div>
       <textarea id="report-output" readonly placeholder="Your formatted report will appear here after you generate it."></textarea>
       <p class="status" id="copy-status">The form resets when you start a new entry - no data is stored.</p>
     </aside>

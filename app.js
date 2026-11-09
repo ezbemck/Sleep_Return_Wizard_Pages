@@ -7,6 +7,15 @@ function updateConditionalFields() {
     const shouldShow = [...controls].some((input) => input.checked && input.value === revealValue);
     target.classList.toggle("visible", shouldShow);
   });
+  const caffeineVisible = document.getElementById("caffeine-details").classList.contains("visible");
+  document.querySelectorAll(".caffeine-row").forEach((row, index) => {
+    const required = caffeineVisible && index === 0;
+    row.querySelectorAll(".caffeine-amount, .caffeine-type, .caffeine-time").forEach((field) => {
+      field.required = required;
+    });
+    const otherSelected = row.querySelector(".caffeine-type").value === "other";
+    row.querySelector(".caffeine-other").required = required && otherSelected;
+  });
 }
 
 function value(name, fallback = "") {
@@ -17,7 +26,56 @@ function value(name, fallback = "") {
 
 function text(name, fallback = "") {
   const field = document.querySelector(`[name="${name}"]`);
-  return field ? field.value.trim() : fallback;
+  return field && field.value.trim() ? field.value.trim() : fallback;
+}
+
+function rawText(name) {
+  const field = document.querySelector(`[name="${name}"]`);
+  return field ? field.value : "";
+}
+
+function formattedTime(name) {
+  return text(name).replace(":", "") || "____";
+}
+
+function createCaffeineRow() {
+  const row = document.createElement("div");
+  row.className = "caffeine-row";
+  row.dataset.optional = document.querySelectorAll(".caffeine-row").length > 0 ? "true" : "false";
+  row.innerHTML = `
+    <span>Pt had</span>
+    <select class="caffeine-amount" aria-label="Caffeine amount">
+      ${Array.from({ length: 10 }, (_, index) => `<option value="${index + 1}">${index + 1}</option>`).join("")}
+    </select>
+    <select class="caffeine-type" aria-label="Caffeine type">
+      <option value="coffee">coffee</option>
+      <option value="tea">tea</option>
+      <option value="soft drink">soft drink</option>
+      <option value="other">other</option>
+    </select>
+    <input class="caffeine-other" type="text" aria-label="Other caffeine type" placeholder="Type of caffeine" hidden>
+    <span>at</span>
+    <input class="caffeine-time" type="time" aria-label="Time consumed">
+  `;
+  const typeSelect = row.querySelector(".caffeine-type");
+  const otherInput = row.querySelector(".caffeine-other");
+  typeSelect.addEventListener("change", () => {
+    otherInput.hidden = typeSelect.value !== "other";
+    otherInput.required = !otherInput.hidden && !row.dataset.optional && document.getElementById("caffeine-details").classList.contains("visible");
+    if (otherInput.hidden) otherInput.value = "";
+  });
+  const caffeineVisible = document.getElementById("caffeine-details").classList.contains("visible");
+  row.querySelectorAll(".caffeine-amount, .caffeine-type, .caffeine-time").forEach((field) => {
+    field.required = caffeineVisible && row.dataset.optional === "false";
+  });
+  return row;
+}
+
+function updateCaffeineAddButton() {
+  const rows = document.querySelectorAll(".caffeine-row");
+  const addButton = document.getElementById("add-caffeine");
+  addButton.disabled = rows.length >= 4;
+  addButton.hidden = rows.length >= 4;
 }
 
 function formatQuestionnaire() {
@@ -34,26 +92,51 @@ function formatQuestionnaire() {
     medicationSentence = `Pt took ${text("medication_details")}.`;
   }
 
-  const caffeineSentence = value("caffeine") === "no"
-    ? "Pt had no caffeine."
-    : `Pt had ${text("caffeine_amount", "an unspecified amount")} of ${text("caffeine_type", "caffeine")} in the ${value("caffeine_time", "AM")}.`;
+  const caffeineRows = [...document.querySelectorAll(".caffeine-row")].map((row) => {
+    const amount = row.querySelector(".caffeine-amount").value;
+    const typeSelect = row.querySelector(".caffeine-type");
+    const type = typeSelect.value === "other" ? row.querySelector(".caffeine-other").value.trim() : typeSelect.value;
+    const plural = { coffee: "coffees", tea: "teas", "soft drink": "soft drinks" }[type] || `${type}${type.endsWith("s") ? "" : "s"}`;
+    const article = /^[aeiou]/i.test(type) ? "an" : "a";
+    const quantity = amount === "1" ? `${article} ${type}` : `${amount} ${plural}`;
+    const time = row.querySelector(".caffeine-time").value.replace(":", "");
+    return time && type ? `${quantity} at ${time}` : "";
+  }).filter(Boolean);
+  let caffeineSentence = "Pt had no caffeine.";
+  if (value("caffeine") === "yes" && caffeineRows.length) {
+    const joinedCaffeine = caffeineRows.length < 2
+      ? caffeineRows[0]
+      : `${caffeineRows.slice(0, -1).join(", ")}, and ${caffeineRows.at(-1)}`;
+    caffeineSentence = `The pt had ${joinedCaffeine}.`;
+  }
   const alcoholSentence = value("alcohol") === "yes" ? `Pt had ${text("alcohol_details", "alcohol")}.` : "Pt had no alcohol.";
-  const painSentence = value("pain") === "yes" ? `Pt experienced ${text("pain_description", "pain")} affecting sleep.` : "Pt experienced no pain affecting sleep.";
-  const activitySentence = value("in_bed_activity") === "yes" ? `Pt ${text("in_bed_activity_details", "read or watched TV")} in bed` : "";
+  const painSentence = value("pain") === "yes"
+    ? `Pt experiencing ${text("pain_description", "pain")} ${value("pain_frequency", "infrequently")} affecting ${value("pain_effect", "sleep onset")}.`
+    : "Pt experienced no pain affecting sleep.";
+  const activitySentence = value("in_bed_activity") === "yes"
+    ? `pt ${text("in_bed_activity_details", "read or watched TV")} in bed`
+    : "no reading/TV in bed";
 
   const comparison = { much_better: "much better", better: "better", same: "the same", worse: "worse", much_worse: "much worse" }[value("sleep_comparison", "same")];
   const sleepSentence = comparison === "the same" ? "Pt slept the same as usual." : `Pt slept ${comparison} than usual.`;
   const latency = { much_longer: "much longer", longer: "longer", same: "the same", shorter: "shorter", much_shorter: "much shorter" }[value("sleep_latency", "same")];
   const feeling = { alert: "alert", refreshed: "refreshed", awake_not_alert: "awake - not alert", awake_not_refreshed: "awake - not refreshed", sleepy: "sleepy" }[value("waking_feeling", "")];
   const feelingSentence = feeling ? `Pt felt ${feeling} upon waking.` : "Pt's feeling upon waking was not recorded.";
-  const sensorSentence = value("sensors") === "yes" ? `Pt mentioned that ${text("sensor_details", "some")} sensors came off.` : "Pt said no leads/sensors came off to their knowledge.";
-  const comment = text("morning_comment");
+  const sensorDetails = rawText("sensor_details").trimEnd();
+  const sensorPrefix = "Pt mentioned that the";
+  const sensorSentence = value("sensors") === "yes"
+    ? `${sensorDetails.startsWith(sensorPrefix) ? sensorDetails : `${sensorPrefix}${sensorDetails ? ` ${sensorDetails}` : ""}`} sensors came off.`
+    : "Pt said no leads/sensors came off to their knowledge.";
+  const comment = rawText("morning_comment");
 
-  const bedtime = [daySentence, medicationSentence, caffeineSentence, alcoholSentence, painSentence, `Pt went to bed ${text("bedtime", "____")}`];
-  if (activitySentence) bedtime.push(activitySentence);
-  bedtime.push(`lights out ${text("lights_out", "____")}.`);
+  const bedtimeTime = formattedTime("bedtime");
+  const lightsOutTime = formattedTime("lights_out");
+  const bedtimeSentence = bedtimeTime === lightsOutTime
+    ? `Pt went to bed + lights out ${bedtimeTime}, ${activitySentence}.`
+    : `Pt went to bed ${bedtimeTime}, ${activitySentence}, and lights out ${lightsOutTime}.`;
+  const bedtime = [daySentence, medicationSentence, caffeineSentence, alcoholSentence, painSentence, bedtimeSentence];
 
-  const morning = [`Pt woke at ${text("wake_time", "____")}.`, sleepSentence, `Pt perceived sleep latency as ${latency}.`, feelingSentence, sensorSentence];
+  const morning = [`Pt woke at ${formattedTime("wake_time")}.`, sleepSentence, `Pt perceived sleep latency as ${latency}.`, feelingSentence, sensorSentence];
   if (comment) morning.push(comment);
 
   return `BEDTIME QUESTIONNAIRE:\n${bedtime.join(" ")}\n\nMORNING QUESTIONNAIRE:\n${morning.join(" ")}`;
@@ -61,6 +144,25 @@ function formatQuestionnaire() {
 
 document.querySelectorAll("input[type=radio]").forEach((input) => input.addEventListener("change", updateConditionalFields));
 updateConditionalFields();
+
+const caffeineRows = document.getElementById("caffeine-rows");
+document.getElementById("add-caffeine").addEventListener("click", () => {
+  if (caffeineRows.children.length < 4) {
+    caffeineRows.append(createCaffeineRow());
+    updateCaffeineAddButton();
+  }
+});
+caffeineRows.append(createCaffeineRow());
+updateCaffeineAddButton();
+
+document.querySelectorAll("[data-prefill]").forEach((field) => {
+  field.addEventListener("focus", () => {
+    if (!field.value.trim()) {
+      field.value = field.dataset.prefill;
+      field.setSelectionRange(field.value.length, field.value.length);
+    }
+  });
+});
 
 document.getElementById("questionnaire-form").addEventListener("submit", (event) => {
   event.preventDefault();
