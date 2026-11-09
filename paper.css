@@ -222,6 +222,7 @@ label {
 }
 
 .caffeine-row,
+.alcohol-row,
 .pain-entry,
 .activity-entry {
   align-items: center;
@@ -229,12 +230,14 @@ label {
   gap: 1.5mm;
 }
 
-.caffeine-row {
+.caffeine-row,
+.alcohol-row {
   display: flex;
   margin: 0 0 1mm;
 }
 
 .caffeine-row span,
+.alcohol-row span,
 .pain-entry span,
 .activity-entry span {
   white-space: nowrap;
@@ -242,6 +245,8 @@ label {
 
 .caffeine-row select,
 .caffeine-row input,
+.alcohol-row select,
+.alcohol-row input,
 .pain-entry input,
 .pain-entry select,
 .activity-entry input {
@@ -250,15 +255,18 @@ label {
   flex: 1 1 20mm;
 }
 
-.caffeine-row .caffeine-amount {
+.caffeine-row .caffeine-amount,
+.alcohol-row .alcohol-amount {
   flex: 0 1 12mm;
 }
 
-.caffeine-row .caffeine-time {
+.caffeine-row .caffeine-time,
+.alcohol-row .alcohol-time {
   flex: 1 1 24mm;
 }
 
 .caffeine-row .caffeine-other[hidden],
+.alcohol-row .alcohol-other[hidden],
 .add-caffeine-button[hidden] {
   display: none;
 }

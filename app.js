@@ -18,6 +18,14 @@ function updateConditionalFields() {
     const otherSelected = row.querySelector(".caffeine-type").value === "other";
     row.querySelector(".caffeine-other").required = required && otherSelected;
   });
+  const alcoholVisible = document.getElementById("alcohol-details").classList.contains("visible");
+  document.querySelectorAll(".alcohol-row").forEach((row, index) => {
+    const required = alcoholVisible && index === 0;
+    row.querySelectorAll(".alcohol-amount, .alcohol-type, .alcohol-time").forEach((field) => {
+      field.required = required;
+    });
+    row.querySelector(".alcohol-other").required = required && row.querySelector(".alcohol-type").value === "other";
+  });
 }
 
 function value(name, fallback = "") {
@@ -80,6 +88,45 @@ function updateCaffeineAddButton() {
   addButton.hidden = rows.length >= 4;
 }
 
+function createAlcoholRow() {
+  const row = document.createElement("div");
+  row.className = "alcohol-row";
+  row.dataset.optional = document.querySelectorAll(".alcohol-row").length > 0 ? "true" : "false";
+  row.innerHTML = `
+    <span>Pt had</span>
+    <select class="alcohol-amount" aria-label="Alcohol amount">
+      ${Array.from({ length: 10 }, (_, index) => `<option value="${index + 1}">${index + 1}</option>`).join("")}
+    </select>
+    <select class="alcohol-type" aria-label="Alcohol type">
+      <option value="beer">beer</option>
+      <option value="wine">wine</option>
+      <option value="other">other</option>
+    </select>
+    <input class="alcohol-other" type="text" maxlength="300" aria-label="Other alcohol type" placeholder="Type of alcohol" hidden>
+    <span>at</span>
+    <input class="alcohol-time" type="time" step="60" aria-label="Time consumed">
+  `;
+  const typeSelect = row.querySelector(".alcohol-type");
+  const otherInput = row.querySelector(".alcohol-other");
+  typeSelect.addEventListener("change", () => {
+    otherInput.hidden = typeSelect.value !== "other";
+    otherInput.required = !otherInput.hidden && row.dataset.optional === "false" && document.getElementById("alcohol-details").classList.contains("visible");
+    if (otherInput.hidden) otherInput.value = "";
+  });
+  const alcoholVisible = document.getElementById("alcohol-details").classList.contains("visible");
+  row.querySelectorAll(".alcohol-amount, .alcohol-type, .alcohol-time").forEach((field) => {
+    field.required = alcoholVisible && row.dataset.optional === "false";
+  });
+  return row;
+}
+
+function updateAlcoholAddButton() {
+  const rows = document.querySelectorAll(".alcohol-row");
+  const addButton = document.getElementById("add-alcohol");
+  addButton.disabled = rows.length >= 4;
+  addButton.hidden = rows.length >= 4;
+}
+
 function formatQuestionnaire() {
   const daySentence = value("usual_day") === "yes"
     ? rawText("day_description")
@@ -111,7 +158,23 @@ function formatQuestionnaire() {
       : `${caffeineRows.slice(0, -1).join(", ")}, and ${caffeineRows.at(-1)}`;
     caffeineSentence = `Pt had ${joinedCaffeine}.`;
   }
-  const alcoholSentence = value("alcohol") === "yes" ? `Pt had ${text("alcohol_details", "alcohol")}.` : "Pt had no alcohol.";
+  const alcoholRows = [...document.querySelectorAll(".alcohol-row")].map((row) => {
+    const amount = row.querySelector(".alcohol-amount").value;
+    const typeSelect = row.querySelector(".alcohol-type");
+    const type = typeSelect.value === "other" ? row.querySelector(".alcohol-other").value.trim() : typeSelect.value;
+    const plural = { beer: "beers", wine: "wines" }[type] || `${type}${type.endsWith("s") ? "" : "s"}`;
+    const article = /^[aeiou]/i.test(type) ? "an" : "a";
+    const quantity = amount === "1" ? `${article} ${type}` : `${amount} ${plural}`;
+    const time = row.querySelector(".alcohol-time").value.trim().replace(":", "");
+    return time && type ? `${quantity} at ${time}` : "";
+  }).filter(Boolean);
+  let alcoholSentence = "Pt had no alcohol.";
+  if (value("alcohol") === "yes" && alcoholRows.length) {
+    const joinedAlcohol = alcoholRows.length < 2
+      ? alcoholRows[0]
+      : `${alcoholRows.slice(0, -1).join(", ")}, and ${alcoholRows.at(-1)}`;
+    alcoholSentence = `Pt had ${joinedAlcohol}.`;
+  }
   const painSentence = value("pain") === "yes"
     ? `Pt experiencing ${text("pain_description", "pain")} ${value("pain_frequency", "infrequently")} affecting ${value("pain_effect", "sleep onset")}.`
     : "Pt experienced no pain affecting sleep.";
@@ -159,6 +222,16 @@ document.getElementById("add-caffeine").addEventListener("click", () => {
 });
 caffeineRows.append(createCaffeineRow());
 updateCaffeineAddButton();
+
+const alcoholRows = document.getElementById("alcohol-rows");
+document.getElementById("add-alcohol").addEventListener("click", () => {
+  if (alcoholRows.children.length < 4) {
+    alcoholRows.append(createAlcoholRow());
+    updateAlcoholAddButton();
+  }
+});
+alcoholRows.append(createAlcoholRow());
+updateAlcoholAddButton();
 
 document.querySelectorAll("[data-prefill]").forEach((field) => {
   field.addEventListener("focus", () => {
