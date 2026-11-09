@@ -53,7 +53,7 @@ function createCaffeineRow() {
       <option value="soft drink">soft drink</option>
       <option value="other">other</option>
     </select>
-    <input class="caffeine-other" type="text" aria-label="Other caffeine type" placeholder="Type of caffeine" hidden>
+    <input class="caffeine-other" type="text" maxlength="300" aria-label="Other caffeine type" placeholder="Type of caffeine" hidden>
     <span>at</span>
     <input class="caffeine-time" type="time" aria-label="Time consumed">
   `;
@@ -124,8 +124,11 @@ function formatQuestionnaire() {
   const feelingSentence = feeling ? `Pt felt ${feeling} upon waking.` : "Pt's feeling upon waking was not recorded.";
   const sensorDetails = rawText("sensor_details").trimEnd();
   const sensorPrefix = "Pt mentioned that the";
+  const sensorComment = sensorDetails.startsWith(sensorPrefix)
+    ? sensorDetails
+    : `${sensorPrefix}${sensorDetails ? ` ${sensorDetails}` : ""}`;
   const sensorSentence = value("sensors") === "yes"
-    ? `${sensorDetails.startsWith(sensorPrefix) ? sensorDetails : `${sensorPrefix}${sensorDetails ? ` ${sensorDetails}` : ""}`} sensors came off.`
+    ? `${sensorComment}${/[.!?]$/.test(sensorComment) ? "" : "."}`
     : "Pt said no leads/sensors came off to their knowledge.";
   const comment = rawText("morning_comment");
 
@@ -162,6 +165,10 @@ document.querySelectorAll("[data-prefill]").forEach((field) => {
       field.setSelectionRange(field.value.length, field.value.length);
     }
   });
+});
+
+document.querySelectorAll('input[type="text"], textarea:not([readonly])').forEach((field) => {
+  field.maxLength = 300;
 });
 
 document.getElementById("questionnaire-form").addEventListener("submit", (event) => {
