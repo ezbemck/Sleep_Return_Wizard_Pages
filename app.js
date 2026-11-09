@@ -55,7 +55,7 @@ function createCaffeineRow() {
     </select>
     <input class="caffeine-other" type="text" maxlength="300" aria-label="Other caffeine type" placeholder="Type of caffeine" hidden>
     <span>at</span>
-    <input class="caffeine-time" type="time" aria-label="Time consumed">
+    <input class="caffeine-time" type="time" step="60" aria-label="Time consumed">
   `;
   const typeSelect = row.querySelector(".caffeine-type");
   const otherInput = row.querySelector(".caffeine-other");
@@ -99,7 +99,7 @@ function formatQuestionnaire() {
     const plural = { coffee: "coffees", tea: "teas", "soft drink": "soft drinks" }[type] || `${type}${type.endsWith("s") ? "" : "s"}`;
     const article = /^[aeiou]/i.test(type) ? "an" : "a";
     const quantity = amount === "1" ? `${article} ${type}` : `${amount} ${plural}`;
-    const time = row.querySelector(".caffeine-time").value.replace(":", "");
+    const time = row.querySelector(".caffeine-time").value.trim().replace(":", "");
     return time && type ? `${quantity} at ${time}` : "";
   }).filter(Boolean);
   let caffeineSentence = "Pt had no caffeine.";
@@ -120,7 +120,7 @@ function formatQuestionnaire() {
   const comparison = { much_better: "much better", better: "better", same: "the same", worse: "worse", much_worse: "much worse" }[value("sleep_comparison", "same")];
   const sleepSentence = comparison === "the same" ? "Pt slept the same as usual." : `Pt slept ${comparison} than usual.`;
   const latency = { much_longer: "much longer", longer: "longer", same: "the same", shorter: "shorter", much_shorter: "much shorter" }[value("sleep_latency", "same")];
-  const feeling = { alert: "alert", refreshed: "refreshed", awake_not_alert: "awake - not alert", awake_not_refreshed: "awake - not refreshed", sleepy: "sleepy" }[value("waking_feeling", "")];
+  const feeling = { alert: "alert", refreshed: "refreshed", awake_alert: "awake - alert", awake_not_refreshed: "awake - not refreshed", sleepy: "sleepy" }[value("waking_feeling", "")];
   const feelingSentence = feeling ? `Pt felt ${feeling} upon waking.` : "Pt's feeling upon waking was not recorded.";
   const sensorDetails = rawText("sensor_details").trimEnd();
   const sensorPrefix = "Pt mentioned that the";
@@ -167,7 +167,7 @@ document.querySelectorAll("[data-prefill]").forEach((field) => {
   });
 });
 
-document.querySelectorAll('input[type="text"], textarea:not([readonly])').forEach((field) => {
+document.querySelectorAll('input[type="text"]:not([data-time-input]):not(.caffeine-time), textarea:not([readonly])').forEach((field) => {
   field.maxLength = 300;
 });
 

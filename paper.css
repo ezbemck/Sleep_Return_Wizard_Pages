@@ -1,0 +1,363 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+  font-family: Calibri, Carlito, Arial, sans-serif;
+  color: #171717;
+  background: #fff;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #171717;
+  font-family: Calibri, Carlito, Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.2;
+}
+
+.page-shell {
+  width: min(297mm, calc(100% - 12mm));
+  margin: 0 auto;
+  padding: 8mm 0 12mm;
+}
+
+.screen-title {
+  margin: 0 0 7mm;
+  text-align: center;
+  font-size: 19pt;
+  font-weight: 700;
+}
+
+.questionnaire-sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) .75pt minmax(0, 1fr);
+  gap: 6mm;
+  align-items: stretch;
+}
+
+.questionnaire-column {
+  min-width: 0;
+}
+
+.questionnaire-divider {
+  width: .75pt;
+  background: #333;
+}
+
+.section-heading {
+  margin: 0 0 4mm;
+  padding: 0 0 1.5mm;
+  font-size: 11pt;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: .5mm;
+}
+
+.question-list {
+  margin: 0;
+  padding: 0 0 0 6mm;
+}
+
+.question-list li {
+  padding-left: .5mm;
+  margin: 0 0 4mm;
+}
+
+.question-list li::marker {
+  font-size: 10.5pt;
+  font-weight: 400;
+}
+
+.question-list p {
+  margin: 0;
+  line-height: 1.35;
+}
+
+.question-list em {
+  font-size: 10pt;
+  font-weight: 400;
+}
+
+.answer-block {
+  margin-top: 1.7mm;
+}
+
+.choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2mm 5mm;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.3mm;
+  min-height: 5mm;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.choice input[type="radio"] {
+  appearance: none;
+  position: relative;
+  width: 3.5mm;
+  height: 3.5mm;
+  flex: 0 0 3.5mm;
+  margin: 0;
+  border: .7pt solid #000;
+  border-radius: 0;
+  background: #fff;
+}
+
+.choice input[type="radio"]:checked {
+  background: #fff;
+}
+
+.choice input[type="radio"]:checked::after {
+  position: absolute;
+  top: .55mm;
+  left: .85mm;
+  width: 1.4mm;
+  height: .75mm;
+  border-bottom: .8pt solid #000;
+  border-left: .8pt solid #000;
+  content: "";
+  transform: rotate(-45deg);
+}
+
+.choice input[type="radio"]:focus-visible {
+  outline: 1pt solid #000;
+  outline-offset: .7mm;
+}
+
+.tick-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2mm 2mm;
+}
+
+.tick-row .choice {
+  align-items: flex-start;
+  min-width: 0;
+  white-space: normal;
+}
+
+input[type="text"],
+input[type="time"],
+select,
+textarea {
+  max-width: 100%;
+  border: .65pt solid #999;
+  border-radius: 0;
+  padding: 1.3mm 1.7mm;
+  background: #fafafa;
+  color: #171717;
+  font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 1pt solid #000;
+  outline-offset: .5mm;
+}
+
+.inline-answer {
+  width: 37mm;
+  height: 8mm;
+  padding: 1mm 1.7mm;
+}
+
+.ruled-lines {
+  display: block;
+  width: 100%;
+  min-height: 20mm;
+  padding: 2mm;
+  resize: vertical;
+  line-height: 1.4;
+  background: #fafafa;
+}
+
+label {
+  display: block;
+  margin: 1mm 0 .7mm;
+  font-size: 10pt;
+  font-weight: 400;
+}
+
+.subquestion {
+  margin: 1mm 0;
+}
+
+.conditional {
+  display: none;
+  margin-top: 2mm;
+}
+
+.conditional.visible {
+  display: block;
+}
+
+.conditional.visible.pain-entry,
+.conditional.visible.activity-entry {
+  display: flex;
+}
+
+.caffeine-row,
+.pain-entry,
+.activity-entry {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5mm;
+}
+
+.caffeine-row {
+  display: flex;
+  margin: 0 0 1mm;
+}
+
+.caffeine-row span,
+.pain-entry span,
+.activity-entry span {
+  white-space: nowrap;
+}
+
+.caffeine-row select,
+.caffeine-row input,
+.pain-entry input,
+.pain-entry select,
+.activity-entry input {
+  width: auto;
+  min-width: 0;
+  flex: 1 1 20mm;
+}
+
+.caffeine-row .caffeine-amount {
+  flex: 0 1 12mm;
+}
+
+.caffeine-row .caffeine-time {
+  flex: 1 1 24mm;
+}
+
+.caffeine-row .caffeine-other[hidden],
+.add-caffeine-button[hidden] {
+  display: none;
+}
+
+.add-caffeine-button {
+  width: 6mm;
+  height: 6mm;
+  border: .7pt solid #000;
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+  font: 12pt Calibri, Carlito, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.pain-entry input {
+  flex: 1 1 22mm;
+}
+
+.pain-entry select:last-child {
+  flex: 1 1 31mm;
+}
+
+.activity-entry input {
+  flex: 1 1 25mm;
+}
+
+.additional-comments {
+  margin-left: 6mm;
+  margin-top: 3mm;
+}
+
+.additional-comments label {
+  margin: 0 0 1.5mm;
+  font-size: 11pt;
+  font-weight: 700;
+}
+
+.screen-actions {
+  display: flex;
+  justify-content: center;
+  margin: 5mm 0;
+}
+
+.generate-button,
+.copy-button {
+  border: .75pt solid #000;
+  border-radius: 0;
+  padding: 1.5mm 3mm;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  cursor: pointer;
+}
+
+.generate-button:hover,
+.copy-button:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.output-panel {
+  margin-top: 5mm;
+  border-top: .75pt solid #000;
+  padding-top: 3mm;
+}
+
+.output-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2mm;
+}
+
+.output-heading h2 {
+  margin: 0;
+  font-size: 11pt;
+  text-decoration: underline;
+}
+
+#report-output {
+  display: block;
+  width: 100%;
+  min-height: 38mm;
+  padding: 2mm;
+  border: .75pt solid #000;
+  line-height: 1.35;
+}
+
+.status {
+  margin: 1.5mm 0 0;
+}
+
+.version-indicator {
+  margin-top: 3mm;
+  text-align: right;
+  font-size: 9pt;
+}
+
+@media (max-width: 210mm) {
+  .questionnaire-sheet {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3mm;
+  }
+
+  .questionnaire-divider {
+    width: 100%;
+    height: .75pt;
+  }
+}
