@@ -107,7 +107,7 @@ function formatQuestionnaire() {
     const joinedCaffeine = caffeineRows.length < 2
       ? caffeineRows[0]
       : `${caffeineRows.slice(0, -1).join(", ")}, and ${caffeineRows.at(-1)}`;
-    caffeineSentence = `The pt had ${joinedCaffeine}.`;
+    caffeineSentence = `Pt had ${joinedCaffeine}.`;
   }
   const alcoholSentence = value("alcohol") === "yes" ? `Pt had ${text("alcohol_details", "alcohol")}.` : "Pt had no alcohol.";
   const painSentence = value("pain") === "yes"
