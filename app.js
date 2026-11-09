@@ -173,6 +173,10 @@ document.querySelectorAll('input[type="text"]:not([data-time-input]):not(.caffei
 
 document.getElementById("questionnaire-form").addEventListener("submit", (event) => {
   event.preventDefault();
+  const generateButton = document.getElementById("generate-button");
+  generateButton.classList.remove("is-whooshing");
+  requestAnimationFrame(() => generateButton.classList.add("is-whooshing"));
+  window.setTimeout(() => generateButton.classList.remove("is-whooshing"), 750);
   const report = formatQuestionnaire();
   document.getElementById("report-output").value = report;
   document.getElementById("copy-button").disabled = false;

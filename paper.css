@@ -31,6 +31,13 @@ body {
   font-weight: 700;
 }
 
+.wizard-emoji {
+  display: inline-block;
+  margin-right: 1mm;
+  font-size: 17pt;
+  vertical-align: .5mm;
+}
+
 .questionnaire-sheet {
   display: grid;
   grid-template-columns: minmax(0, 1fr) .75pt minmax(0, 1fr);
@@ -305,6 +312,45 @@ label {
   color: #000;
   font: inherit;
   cursor: pointer;
+}
+
+.generate-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.generate-button.is-whooshing::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  color: #171717;
+  content: "✦  ✧  ✦";
+  font-size: 15pt;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: wizard-whoosh 650ms ease-out both;
+}
+
+@keyframes wizard-whoosh {
+  from {
+    opacity: 0;
+    transform: translate(-100%, -50%) rotate(-12deg);
+  }
+  18% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(100%, -50%) rotate(14deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .generate-button.is-whooshing::after {
+    animation: none;
+  }
 }
 
 .generate-button:hover,

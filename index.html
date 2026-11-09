@@ -8,7 +8,7 @@
 </head>
 <body>
   <main class="page-shell">
-    <h1 class="screen-title">Sleep Return Wizard</h1>
+    <h1 class="screen-title"><span class="wizard-emoji" aria-hidden="true">🧙</span> Sleep Return Wizard</h1>
     <form class="workspace" id="questionnaire-form">
       <div class="questionnaire-sheet">
         <section class="questionnaire-column" aria-labelledby="bedtime-heading">
@@ -76,7 +76,7 @@
           <div class="additional-comments"><label for="morning_comment">Additional Comments:</label><textarea class="ruled-lines" id="morning_comment" name="morning_comment" rows="3" placeholder="Pt mentioned that" data-prefill="Pt mentioned that "></textarea></div>
         </section>
       </div>
-      <div class="screen-actions"><button class="generate-button" type="submit">Generate report</button></div>
+      <div class="screen-actions"><button class="generate-button" id="generate-button" type="submit">Generate report</button></div>
     </form>
 
     <aside class="output-panel screen-only">
@@ -84,7 +84,7 @@
       <textarea id="report-output" readonly placeholder="Your formatted report will appear here after you generate it."></textarea>
       <p class="status" id="copy-status">The form resets when you start a new entry - no data is stored.</p>
     </aside>
-    <footer class="version-indicator" aria-label="Application version">v3.3.1</footer>
+    <footer class="version-indicator" aria-label="Application version">v3.3.2</footer>
   </main>
   <script src="app.js"></script>
 </body>
