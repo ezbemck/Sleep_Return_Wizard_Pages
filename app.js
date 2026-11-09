@@ -7,6 +7,8 @@ function updateConditionalFields() {
     const shouldShow = [...controls].some((input) => input.checked && input.value === revealValue);
     target.classList.toggle("visible", shouldShow);
   });
+  const unusualDaySelected = document.querySelector('input[name="usual_day"]:checked')?.value === "yes";
+  document.getElementById("day_description").required = unusualDaySelected;
   const caffeineVisible = document.getElementById("caffeine-details").classList.contains("visible");
   document.querySelectorAll(".caffeine-row").forEach((row, index) => {
     const required = caffeineVisible && index === 0;
@@ -79,8 +81,8 @@ function updateCaffeineAddButton() {
 }
 
 function formatQuestionnaire() {
-  const daySentence = value("usual_day") === "no"
-    ? `Pt did not have a usual day - ${text("day_description")}`
+  const daySentence = value("usual_day") === "yes"
+    ? rawText("day_description")
     : "Pt had usual day.";
 
   let medicationSentence;

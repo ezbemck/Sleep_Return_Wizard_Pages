@@ -17,8 +17,8 @@
             <li>
               <p>Was today an unusual day in any way? If so, describe what effect it had on you? <em>(Please tick one)</em></p>
               <div class="answer-block">
-                <div class="choice-row"><label class="choice"><input type="radio" name="usual_day" value="yes" checked><span>Yes</span></label><label class="choice"><input type="radio" name="usual_day" value="no" data-reveals="day-description" data-reveals-value="no"><span>No</span></label></div>
-                <div class="conditional" id="day-description"><label for="day_description">Effect on the day</label><textarea class="ruled-lines" id="day_description" name="day_description" rows="3" placeholder="Describe the effect"></textarea></div>
+                <div class="choice-row"><label class="choice"><input type="radio" name="usual_day" value="yes" data-reveals="day-description"><span>Yes</span></label><label class="choice"><input type="radio" name="usual_day" value="no" checked><span>No</span></label></div>
+                <div class="conditional" id="day-description"><label for="day_description">If yes, describe what happened</label><textarea class="ruled-lines" id="day_description" name="day_description" rows="3" placeholder="Pt mentioned that..." data-prefill="Pt mentioned that "></textarea></div>
               </div>
             </li>
             <li>
@@ -84,7 +84,7 @@
       <textarea id="report-output" readonly placeholder="Your formatted report will appear here after you generate it."></textarea>
       <p class="status" id="copy-status">The form resets when you start a new entry - no data is stored.</p>
     </aside>
-    <footer class="version-indicator" aria-label="Application version">v3.3.4</footer>
+    <footer class="version-indicator" aria-label="Application version">v3.3.5</footer>
   </main>
   <script src="app.js"></script>
 </body>
