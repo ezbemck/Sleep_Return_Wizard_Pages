@@ -35,28 +35,28 @@
             <li>
               <p>Did you ingest any caffeine today (teas, coffee, energy drinks, chocolate etc)? If so, please list type and amount. <em>(Please tick one)</em></p>
               <div class="answer-block">
-                <div class="choice-row"><label class="choice"><input type="radio" name="caffeine" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="caffeine" value="yes" data-reveals="caffeine-details"><span>Yes</span></label></div>
+                <div class="choice-row"><label class="choice"><input type="radio" name="caffeine" value="yes" data-reveals="caffeine-details"><span>Yes</span></label><label class="choice"><input type="radio" name="caffeine" value="no" checked><span>No</span></label></div>
                 <div class="conditional" id="caffeine-details"><div id="caffeine-rows"></div><button class="add-caffeine-button" id="add-caffeine" type="button" title="Add another caffeine entry" aria-label="Add another caffeine entry">+</button></div>
               </div>
             </li>
             <li>
               <p>Have you had any alcoholic beverages today? If so, please list. <em>(Please tick one)</em></p>
               <div class="answer-block">
-                <div class="choice-row"><label class="choice"><input type="radio" name="alcohol" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="alcohol" value="yes" data-reveals="alcohol-details"><span>Yes</span></label></div>
+                <div class="choice-row"><label class="choice"><input type="radio" name="alcohol" value="yes" data-reveals="alcohol-details"><span>Yes</span></label><label class="choice"><input type="radio" name="alcohol" value="no" checked><span>No</span></label></div>
                 <div class="conditional" id="alcohol-details"><label for="alcohol_details">Alcohol details</label><textarea class="ruled-lines" id="alcohol_details" name="alcohol_details" rows="3" placeholder="List beverage and amount"></textarea></div>
               </div>
             </li>
             <li>
               <p>Are you experiencing any pain or discomfort at present? If so, please describe. <em>(Please tick one)</em></p>
               <div class="answer-block">
-                <div class="choice-row"><label class="choice"><input type="radio" name="pain" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="pain" value="yes" data-reveals="pain-details"><span>Yes</span></label></div>
+                <div class="choice-row"><label class="choice"><input type="radio" name="pain" value="yes" data-reveals="pain-details"><span>Yes</span></label><label class="choice"><input type="radio" name="pain" value="no" checked><span>No</span></label></div>
                 <div class="conditional pain-entry" id="pain-details"><span>Pt is experiencing</span><input id="pain_description" name="pain_description" type="text" placeholder="type of pain" aria-label="Type of pain"><select id="pain_frequency" name="pain_frequency" aria-label="How often pain occurs"><option value="rarely">rarely</option><option value="infrequently">infrequently</option><option value="always">always</option></select><span>affecting</span><select id="pain_effect" name="pain_effect" aria-label="Sleep affected"><option value="sleep onset">sleep onset</option><option value="sleep maintenance">sleep maintenance</option><option value="sleep onset & maintenance">sleep onset &amp; maintenance</option></select></div>
               </div>
             </li>
             <li><p>What time did you go to bed?</p><div class="answer-block"><input class="inline-answer time-answer" id="bedtime" name="bedtime" type="time" step="60" required aria-label="Bedtime"></div></li>
             <li>
               <p>Did you read or watch television in bed? <em>(Please tick one)</em></p>
-              <div class="answer-block"><div class="choice-row"><label class="choice"><input type="radio" name="in_bed_activity" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="in_bed_activity" value="yes" data-reveals="activity-details"><span>Yes</span></label></div><div class="conditional activity-entry" id="activity-details"><span>Pt</span><input id="in_bed_activity_details" name="in_bed_activity_details" type="text" value="read or watched TV" aria-label="What did the patient do"><span>in bed</span></div></div>
+              <div class="answer-block"><div class="choice-row"><label class="choice"><input type="radio" name="in_bed_activity" value="yes" data-reveals="activity-details"><span>Yes</span></label><label class="choice"><input type="radio" name="in_bed_activity" value="no" checked><span>No</span></label></div><div class="conditional activity-entry" id="activity-details"><span>Pt</span><input id="in_bed_activity_details" name="in_bed_activity_details" type="text" value="read or watched TV" aria-label="What did the patient do"><span>in bed</span></div></div>
             </li>
             <li><p>What time did you turn the lights out?</p><div class="answer-block"><input class="inline-answer time-answer" id="lights_out" name="lights_out" type="time" step="60" required aria-label="Lights out"></div></li>
           </ol>
@@ -71,7 +71,7 @@
             <li><p>How well do you feel you slept last night compared to your usual night's sleep? <em>(Please tick one)</em></p><div class="answer-block"><div class="choice-row tick-row"><label class="choice"><input type="radio" name="sleep_comparison" value="much_better" required><span>Much Better</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="better"><span>Better</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="same"><span>Same</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="worse"><span>Worse</span></label><label class="choice"><input type="radio" name="sleep_comparison" value="much_worse"><span>Much worse</span></label></div></div></li>
             <li><p>How long did it take you to fall asleep last night compared to usual? <em>(Please tick one)</em></p><div class="answer-block"><div class="choice-row tick-row"><label class="choice"><input type="radio" name="sleep_latency" value="much_longer" required><span>Much longer</span></label><label class="choice"><input type="radio" name="sleep_latency" value="longer"><span>Longer</span></label><label class="choice"><input type="radio" name="sleep_latency" value="same"><span>Same</span></label><label class="choice"><input type="radio" name="sleep_latency" value="shorter"><span>Shorter</span></label><label class="choice"><input type="radio" name="sleep_latency" value="much_shorter"><span>Much shorter</span></label></div></div></li>
             <li><p>How did you feel upon waking this morning? <em>(Please tick one)</em></p><div class="answer-block"><div class="choice-row tick-row"><label class="choice"><input type="radio" name="waking_feeling" value="alert" required><span>Alert</span></label><label class="choice"><input type="radio" name="waking_feeling" value="refreshed"><span>Refreshed</span></label><label class="choice"><input type="radio" name="waking_feeling" value="awake_alert"><span>Awake - Alert</span></label><label class="choice"><input type="radio" name="waking_feeling" value="awake_not_refreshed"><span>Awake - Not refreshed</span></label><label class="choice"><input type="radio" name="waking_feeling" value="sleepy"><span>Sleepy</span></label></div></div></li>
-            <li><p>Did any leads or sensors come off? Please specify. <em>(Please tick one)</em></p><div class="answer-block"><div class="choice-row"><label class="choice"><input type="radio" name="sensors" value="no" checked><span>No</span></label><label class="choice"><input type="radio" name="sensors" value="yes" data-reveals="sensor-details"><span>Yes</span></label></div><div class="conditional" id="sensor-details"><label for="sensor_details">Details</label><textarea class="ruled-lines" id="sensor_details" name="sensor_details" rows="3" placeholder="Pt mentioned that the" data-prefill="Pt mentioned that the "></textarea></div></div></li>
+            <li><p>Did any leads or sensors come off? Please specify. <em>(Please tick one)</em></p><div class="answer-block"><div class="choice-row"><label class="choice"><input type="radio" name="sensors" value="yes" data-reveals="sensor-details"><span>Yes</span></label><label class="choice"><input type="radio" name="sensors" value="no" checked><span>No</span></label></div><div class="conditional" id="sensor-details"><label for="sensor_details">Details</label><textarea class="ruled-lines" id="sensor_details" name="sensor_details" rows="3" placeholder="Pt mentioned that the" data-prefill="Pt mentioned that the "></textarea></div></div></li>
           </ol>
           <div class="additional-comments"><label for="morning_comment">Additional Comments:</label><textarea class="ruled-lines" id="morning_comment" name="morning_comment" rows="3" placeholder="Pt mentioned that" data-prefill="Pt mentioned that "></textarea></div>
         </section>
@@ -84,7 +84,7 @@
       <textarea id="report-output" readonly placeholder="Your formatted report will appear here after you generate it."></textarea>
       <p class="status" id="copy-status">The form resets when you start a new entry - no data is stored.</p>
     </aside>
-    <footer class="version-indicator" aria-label="Application version">v3.3.2</footer>
+    <footer class="version-indicator" aria-label="Application version">v3.3.4</footer>
   </main>
   <script src="app.js"></script>
 </body>

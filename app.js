@@ -142,7 +142,7 @@ function formatQuestionnaire() {
   const morning = [`Pt woke at ${formattedTime("wake_time")}.`, sleepSentence, `Pt perceived sleep latency as ${latency}.`, feelingSentence, sensorSentence];
   if (comment) morning.push(comment);
 
-  return `BEDTIME QUESTIONNAIRE:\n${bedtime.join(" ")}\n\nMORNING QUESTIONNAIRE:\n${morning.join(" ")}`;
+  return `BEDTIME QUESTIONNAIRE:\n${bedtime.join(" ")}\nMORNING QUESTIONNAIRE:\n${morning.join(" ")}`;
 }
 
 document.querySelectorAll("input[type=radio]").forEach((input) => input.addEventListener("change", updateConditionalFields));
