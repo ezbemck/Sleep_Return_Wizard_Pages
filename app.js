@@ -65,7 +65,7 @@ function createCaffeineRow() {
     </select>
     <input class="caffeine-other" type="text" maxlength="300" aria-label="Other caffeine type" placeholder="Type of caffeine" hidden>
     <span>at</span>
-    <input class="caffeine-time" type="time" step="60" aria-label="Time consumed">
+    <input class="caffeine-time" type="time" value="${row.dataset.optional === "false" ? "08:00" : ""}" step="60" aria-label="Time consumed">
   `;
   const typeSelect = row.querySelector(".caffeine-type");
   const otherInput = row.querySelector(".caffeine-other");
